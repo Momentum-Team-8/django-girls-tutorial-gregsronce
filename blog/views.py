@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.utils import timezone
+from .models import Post
 
 # Create your views here.
 
@@ -10,4 +12,5 @@ Views can also generate JSON responses for API endpoints.
 Views are called by a user or part of the Django app itself visiting the url connected to that view in urls.py.'''
 
 def post_list(request):
-    return render(request, 'blog/post_list.html', {})
+    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    return render(request, 'blog/post_list.html', {'posts': posts})
